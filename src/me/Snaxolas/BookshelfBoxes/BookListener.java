@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -23,7 +24,7 @@ public class BookListener implements Listener{
 
     static final Material[] okItems = {Material.BOOK, Material.WRITTEN_BOOK, Material.WRITABLE_BOOK, Material.ENCHANTED_BOOK,
             Material.MAP, Material.FILLED_MAP, Material.PIGLIN_BANNER_PATTERN, Material.FLOWER_BANNER_PATTERN,
-            Material.GLOBE_BANNER_PATTERN, Material.MOJANG_BANNER_PATTERN, Material.SKULL_BANNER_PATTERN, Material.CREEPER_BANNER_PATTERN};
+            Material.GLOBE_BANNER_PATTERN, Material.MOJANG_BANNER_PATTERN, Material.SKULL_BANNER_PATTERN, Material.CREEPER_BANNER_PATTERN, Material.KNOWLEDGE_BOOK};
 
     /*
             Material.MUSIC_DISC_WARD, Material.MUSIC_DISC_STRAD, Material.MUSIC_DISC_WAIT, Material.MUSIC_DISC_11,
@@ -54,8 +55,6 @@ public class BookListener implements Listener{
                     return null;
                 }
             }, 18, "Bookshelf");
-
-
 
 
             ItemStack[] itemStacks = WorldBlockInventories.getInvOf(bookshelf.getLocation());
@@ -106,22 +105,28 @@ public class BookListener implements Listener{
     public void onInventoryClick (InventoryClickEvent e) {
 
         InventoryHolder h = e.getView().getTopInventory().getHolder();
-        if (h != null && h instanceof BlockInventoryHolder) {
+        if (h instanceof BlockInventoryHolder) {
 
-            if(e.getAction().name().equals("NOTHING")) {
-                if(e.getCurrentItem() != null) {
-                    e.setCurrentItem(e.getCursor().clone());
-                    e.getCursor().setAmount(0);
-                }
-            }else{
-                BlockInventoryHolder blockHolder = (BlockInventoryHolder) h;
-                if (blockHolder.getBlock().getType().equals(Material.BOOKSHELF)) {
+            BlockInventoryHolder blockHolder = (BlockInventoryHolder) h;
+            if (blockHolder.getBlock().getType().equals(Material.BOOKSHELF)) {
 
-                    if (e.getCurrentItem() == null || !(isOK(e.getCurrentItem().getType()))) {
-                        e.setCancelled(true);
+                InventoryAction a = e.getAction();
+                Bukkit.getConsoleSender().sendMessage("Action type: " + a);
+
+                if(a.name().equals("HOTBAR_SWAP") || a.name().equals("HOTBAR_MOVE_AND_READD")){
+                    e.setCancelled(true);
+                }else if(e.getCurrentItem() == null){
+                    return;
+                }else if(isOK(e.getCurrentItem().getType())){
+                    if(a.name().equals("NOTHING")) {
+                        e.setCurrentItem(e.getCursor().clone());
+                        e.getCursor().setAmount(0);
                     }
+                }else{
+                    e.setCancelled(true);
                 }
             }
+
         }
 
     }
