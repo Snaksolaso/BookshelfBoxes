@@ -5,4 +5,4 @@ Stores all bookshelf content data based on their coordinates, in the file Blocks
 
 Prevents opening or breakage of bookshelves which are currently opened by another user, in order to prevent duping.
 
-The contents of bookshelves which are broken or moved by the environment (a piston, tnt, creeper, what have you) will be inaccessible until a new bookshelf is places at the same coordinates as the bookshelf was originally located. 
+The contents of bookshelves which are broken or moved by the environment (a piston, TNT, creeper, what have you) will be inaccessible until a new bookshelf is placed at the same coordinates as the bookshelf was originally located. 
