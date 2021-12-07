@@ -41,7 +41,7 @@ public class BookListener implements Listener{
 
         if (a.equals(Action.RIGHT_CLICK_BLOCK) && e.getClickedBlock().getType().equals(Material.BOOKSHELF) && !p.isSneaking()) {
             e.setCancelled(true);
-            Block bookshelf = e.getClickedBlock();
+            final Block bookshelf = e.getClickedBlock();
 
             Inventory inv = Bukkit.createInventory(new BlockInventoryHolder() {
                 @Override
